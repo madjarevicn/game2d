@@ -237,6 +237,8 @@ public class Tetris extends JPanel {
 
 	public static void main(String[] args) {
 		JFrame f = new JFrame("Tetris");
+		f.setResizable(false);
+		f.setLocationRelativeTo(null);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setSize(12*26+10, 26*23+25);
 		f.setVisible(true);

@@ -6,6 +6,10 @@ import java.awt.image.WritableRaster;
 
 import rafgfxlib.Util;
 
+
+/**
+ * @author madjarevicn
+ */
 public class ImageMethods {
 
 	// metoda koja prima sliku i vraca sliku u reflekciji za 1/4 dole
@@ -102,96 +106,115 @@ public class ImageMethods {
 		return ret;
 
 	}
-	//metoda koja potamni tamne boje
+
+	// metoda koja potamni tamne boje
 	public static BufferedImage impactColors(BufferedImage img) {
 		WritableRaster raster = img.getRaster();
-		WritableRaster ret =Util.createRaster(img.getWidth(), img.getHeight(), false);
-		
-		int [] rgb = new int[3];
+		WritableRaster ret = Util.createRaster(img.getWidth(), img.getHeight(), false);
+
+		int[] rgb = new int[3];
 		for (int i = 0; i < img.getWidth(); i++) {
 			for (int j = 0; j < img.getHeight(); j++) {
-				
+
 				raster.getPixel(i, j, rgb);
-				if(rgb[0]>125 && rgb[1]>125 && rgb[2]>125)
-				{
-					rgb[0]=rgb[0]+50>255?255:rgb[0]+50;
-					rgb[1]=rgb[1]+50>255?255:rgb[1]+50;
-					rgb[2]=rgb[2]+50>255?255:rgb[2]+50;
+				if (rgb[0] > 125 && rgb[1] > 125 && rgb[2] > 125) {
+					rgb[0] = rgb[0] + 50 > 255 ? 255 : rgb[0] + 50;
+					rgb[1] = rgb[1] + 50 > 255 ? 255 : rgb[1] + 50;
+					rgb[2] = rgb[2] + 50 > 255 ? 255 : rgb[2] + 50;
 				}
 				ret.setPixel(i, j, rgb);
 			}
 		}
 		return Util.rasterToImage(ret);
 	}
-	
-	//negativ metoda
+
+	// negativ metoda
 	public static BufferedImage invertColors(BufferedImage img) {
 		WritableRaster raster = img.getRaster();
-		WritableRaster ret =Util.createRaster(img.getWidth(), img.getHeight(), false);
-		
-		int [] rgb = new int[3];
+		WritableRaster ret = Util.createRaster(img.getWidth(), img.getHeight(), false);
+
+		int[] rgb = new int[3];
 		for (int i = 0; i < img.getWidth(); i++) {
 			for (int j = 0; j < img.getHeight(); j++) {
-				
+
 				raster.getPixel(i, j, rgb);
-				rgb[0]=Math.abs(255-rgb[0]);
-				rgb[1]=Math.abs(255-rgb[1]);
-				rgb[2]=Math.abs(255-rgb[2]);
+				rgb[0] = Math.abs(255 - rgb[0]);
+				rgb[1] = Math.abs(255 - rgb[1]);
+				rgb[2] = Math.abs(255 - rgb[2]);
 				ret.setPixel(i, j, rgb);
 			}
 		}
 		return Util.rasterToImage(ret);
 	}
 
-	//rotacija za 90 stepeni - ne radi
-	
-	public static BufferedImage rotate180(BufferedImage img) {
+	// rotacija za 90 stepeni - ne radi
+	//MORAMO IMPLEMENTIRATI VALJANU ROTACIJU
+	public static BufferedImage rotateNaopacke(BufferedImage img) {
 		WritableRaster source = img.getRaster();
 		WritableRaster ret = Util.createRaster(source.getHeight(), source.getWidth(), false);
-		
-		int [] rgb = new int[3];
-		
-		for(int y = 0; y < source.getHeight(); y++)
-		{
-			for(int x = 0; x < source.getWidth(); x++)
-			{
+
+		int[] rgb = new int[3];
+
+		for (int y = 0; y < source.getHeight(); y++) {
+			for (int x = 0; x < source.getWidth(); x++) {
 				source.getPixel(x, y, rgb);
 				ret.setPixel(source.getWidth() - y - 1, x, rgb);
 			}
 		}
 		return Util.rasterToImage(ret);
 	}
-	
-	public static BufferedImage black_white(BufferedImage img){
+
+	public static BufferedImage blackWhite(BufferedImage img) {
 		WritableRaster source = img.getRaster();
 		WritableRaster target = Util.createRaster(source.getWidth(), source.getHeight(), false);
-		
+
 		int rgb[] = new int[3];
-		
-		for(int y = 0; y < source.getHeight(); y++)
-		{
-			for(int x = 0; x < source.getWidth(); x++)
-			{
+
+		for (int y = 0; y < source.getHeight(); y++) {
+			for (int x = 0; x < source.getWidth(); x++) {
 				source.getPixel(x, y, rgb);
-			
+
 				// Pronalazimo intenzitet boje po formuli iz prethodnog primjera
-				int i = (int)(rgb[0] * 0.30 + rgb[1] * 0.59 + rgb[2] * 0.11);
-				
+				int i = (int) (rgb[0] * 0.30 + rgb[1] * 0.59 + rgb[2] * 0.11);
+
 				// I onda na osnovu fiksnog praga odlucujemo da li zelimo potpuno
 				// crni ili potpuno bijeli piksel.
-				if(i > 160)
+				if (i > 160)
 					i = 255;
 				else
 					i = 0;
-				
+
 				rgb[0] = i;
 				rgb[1] = i;
 				rgb[2] = i;
-				
+
 				target.setPixel(x, y, rgb);
 			}
 		}
-	
+
 		return Util.rasterToImage(target);
 	}
+
+	//metoda koja odredjenu sliku stavlja u ram
+	public static BufferedImage napraviRam(BufferedImage img) {
+		WritableRaster source = img.getRaster();
+		WritableRaster ret = Util.createRaster(source.getWidth(), source.getHeight(), false);
+
+		int[] rgb = new int[3];
+		for (int i = 0; i < source.getWidth(); i++) {
+			for (int j = 0; j < source.getHeight(); j++) {
+				source.getPixel(i, j, rgb);
+				if (i < 20 || j < 20 || i > source.getWidth() - 20|| j > source.getHeight() - 20) {
+					rgb[0] = 200;
+					rgb[1] = 200;
+					rgb[2] = 200;
+				}
+				ret.setPixel(i, j, rgb);
+				
+			}
+		}
+		return Util.rasterToImage(ret);
+	}
+	
+	
 }

@@ -14,6 +14,6 @@ public class Main {
 		target = ImageMethods.scale(imgMadji, imgMadji.getWidth()/2, imgMadji.getHeight()/2).getRaster();
 		
 		BufferedImage compressed = Util.rasterToImage(target);	
-		ImageViewer.showImageWindow(ImageMethods.black_white(compressed), "Madji");
+		ImageViewer.showImageWindow(ImageMethods.napraviRam(compressed), "Madji");
 	}
 }
